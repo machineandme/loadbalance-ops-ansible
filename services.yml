@@ -4,8 +4,14 @@ http:
       entryPoints:
       - web
       - websecure
-      rule: "PathPrefix(`/www`)"
+      rule: "Host(`machineand.me`)"
       service: service-www
+      tls:
+        certResolver: default
+        domains:
+          - main: "machineand.me"
+            sans:
+              - "*.machineand.me"
   services:
     service-www:
       loadBalancer:

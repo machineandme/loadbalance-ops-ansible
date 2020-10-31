@@ -1,23 +1,36 @@
 global:
   checkNewVersion: yes
   sendAnonymousUsage: yes
-log:
-  level: "DEBUG"
 entryPoints:
   web:
     address: :80
   websecure:
     address: :443
+accessLog:
+  filePath: /var/log/traefik.access.log
+  format: json
+  fields:
+    defaultMode: keep
+    headers:
+      defaultMode: keep
+      names:
+        Authorization: drop
+        Cookie: drop
+certificatesResolvers:
+  default:
+    acme:
+      email: "billionspoint@gmail.com"
+      storage: "/opt/traefik//acme.json"
+      tlschallenge: yes
+metrics:
+  datadog: {}
+tracing:
+  datadog: {}
+log:
+  level: "INFO"
 api:
- insecure: yes
- dashboard: yes
-acme:
-  email: "billionspoint@gmail.com"
-  storage: "acme.json"
-  entryPoint: "https"
-  onHostRule: yes
-  httpChallenge:
-    entryPoint: "http"
+ insecure: no
+ dashboard: no
 providers:
   file:
     filename: /opt/traefik/services.yml

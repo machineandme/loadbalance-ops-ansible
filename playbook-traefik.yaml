@@ -1,6 +1,36 @@
 ---
 - name: Install traefik
   hosts: gateway
+  roles:
+    - { role: datadog.datadog, become: yes }
+  vars:
+    datadog_api_key: "5faebf15670514349970e9d499bf3ca8"
+    datadog_site: "datadoghq.com"
+    datadog_config:
+      tags:
+        - "region:Frankfurt1"
+        - "availability-zone:digital-ocean"
+        - "instance-type:droplet"
+      logs_enabled: true
+      process_config:
+        enabled: "true"
+    datadog_checks:
+      systemd:
+        init_config:
+        instances:
+          - unit_names:
+              - traefik
+      journald:
+        logs:
+          - type: journald
+            include_units:
+              - traefik.service
+      traefik:
+        logs:
+          - type: file
+            path: /var/log/traefik.access.log
+            service: traefik
+            source: traefik
   tasks:
   - name: Create app directory in /opt
     file:
