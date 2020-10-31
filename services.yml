@@ -1,0 +1,17 @@
+http:
+  routers:
+    to-service-www:
+      entryPoints:
+      - web
+      - websecure
+      rule: "PathPrefix(`/www`)"
+      service: service-www
+  services:
+    service-www:
+      loadBalancer:
+        servers:
+        - url: "http://10.114.0.3/"
+    # ticker:
+    #   loadBalancer:
+    #     servers:
+    #     - url: "http://10.114.0.4/"

@@ -1,0 +1,47 @@
+---
+- name: Install traefik
+  hosts: gateway
+  tasks:
+  - name: Create app directory in /opt
+    file:
+      path: /opt/traefik/
+      state: directory
+      mode: '0777'
+  - name: Create conf directory in /opt
+    file:
+      path: /etc/traefik/
+      state: directory
+      mode: '0777'
+  - name: Download binary version
+    unarchive:
+      src: https://github.com/traefik/traefik/releases/download/v2.3.2/traefik_v2.3.2_linux_amd64.tar.gz
+      dest: /opt/traefik/
+      remote_src: yes
+  - name: Uplaoding traefik configuration
+    copy:
+      src: traefik.yml
+      dest: /etc/traefik/traefik.yml
+      mode: '0777'
+  - name: Uplaoding services configuration
+    copy:
+      src: services.yml
+      dest: /opt/traefik/services.yml
+      mode: '0777'
+  - name: Creating service in systemd
+    copy:
+      dest: /etc/systemd/system/traefik.service
+      content: |
+        [Unit]
+        Description=traefik
+        [Service]
+        Type=simple
+        ExecStart=/opt/traefik/traefik
+        Restart=always
+        [Install]
+        WantedBy=multi-user.target
+  - name: Enable and restart service
+    systemd:
+      daemon_reload: yes
+      enabled: yes
+      state: restarted
+      name: traefik
