@@ -25,5 +25,5 @@ jobs:
           sudo dpkg -i ./task_linux_amd64.deb
 
       - name: Ansible some playbook
-        run: ansible-playbook playbook-traefik.yaml
+        run: ansible-playbook ../playbook-traefik.yaml
         working-directory: ansible
