@@ -12,11 +12,33 @@ http:
           - main: "machineand.me"
             sans:
               - "*.machineand.me"
+    to-service-ticker-backend:
+      entryPoints:
+      - websecure
+      rule: "Host(`api.v1.ticker.love`)"
+      service: service-ticker-backend
+      tls:
+        certResolver: default
+        domains:
+          - main: "api.v1.ticker.love"
+    TMP-to-service-ticker-backend:
+      entryPoints:
+      - websecure
+      rule: "Host(`ticker.love`)"
+      service: service-ticker-backend
+      tls:
+        certResolver: default
+        domains:
+          - main: "ticker.love"
   services:
     service-www:
       loadBalancer:
         servers:
         - url: "http://10.114.0.3/"
+    service-ticker-backend:
+      loadBalancer:
+        servers:
+        - url: "http://10.114.0.4/"
     # ticker:
     #   loadBalancer:
     #     servers:
