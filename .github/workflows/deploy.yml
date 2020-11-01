@@ -19,10 +19,8 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa.pub
 
-      - name: Install Taskfile.dev deb
-        run: |
-          wget https://github.com/go-task/task/releases/download/v3.0.0/task_linux_amd64.deb
-          sudo dpkg -i ./task_linux_amd64.deb
+      - name: Install datadog role
+        run: ansible-galaxy install datadog.datadog
 
       - name: Ansible some playbook
         run: ansible-playbook ../playbook-traefik.yaml
