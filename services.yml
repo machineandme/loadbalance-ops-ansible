@@ -6,6 +6,7 @@ http:
       - websecure
       rule: "Host(`machineand.me`)"
       service: service-www
+      priority: 10
       tls:
         certResolver: default
         domains:
@@ -14,22 +15,22 @@ http:
               - "*.machineand.me"
     to-service-ticker-backend:
       entryPoints:
+      - web
       - websecure
-      rule: "Host(`api.v1.ticker.love`)"
+      rule: "Host(`v1.ticker.love`)"
       service: service-ticker-backend
+      priority: 10
       tls:
         certResolver: default
         domains:
-          - main: "api.v1.ticker.love"
-    TMP-to-service-ticker-backend:
+          - main: "v1.ticker.love"
+    default:
       entryPoints:
+      - web
       - websecure
-      rule: "Host(`ticker.love`)"
-      service: service-ticker-backend
-      tls:
-        certResolver: default
-        domains:
-          - main: "ticker.love"
+      rule: "HostRegexp(`{host:.+}`)"
+      service: service-www
+      priority: 1
   services:
     service-www:
       loadBalancer:
