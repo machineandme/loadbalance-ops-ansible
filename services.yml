@@ -38,7 +38,9 @@ http:
     service-ticker-backend:
       loadBalancer:
         servers:
-        - url: "http://10.114.0.4/"
+        - url: "http://10.114.0.4:4356"
+        - url: "http://10.114.0.4:4357"
+        - url: "http://10.114.0.4:4358"
     # ticker:
     #   loadBalancer:
     #     servers:
