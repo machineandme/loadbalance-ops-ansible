@@ -1,33 +1,31 @@
 http:
   routers:
     to-service-www:
-      entryPoints:
-      - web
-      - websecure
-      rule: "Host(`machineand.me`)"
+      rule: Host(`machineand.me`)
       service: service-www
+      entryPoints:
+        - web
+        - websecure
       priority: 1
       tls:
         certResolver: default
         domains:
           - main: "machineand.me"
     to-service-ticker-backend:
-      entryPoints:
-      - web
-      - websecure
-      rule: "Host(`v1.ticker.love`)"
+      rule: Host(`v1.ticker.love`)
       service: service-ticker-backend
+      entryPoints:
+        - websecure
       priority: 2
       tls:
         certResolver: default
         domains:
           - main: "v1.ticker.love"
     to-service-codetee:
-      entryPoints:
-      - web
-      - websecure
-      rule: "Host(`codetee.machineand.me`)"
+      rule: Host(`codetee.machineand.me`)
       service: service-codetee
+      entryPoints:
+        - websecure
       priority: 2
       tls:
         certResolver: default
@@ -35,27 +33,23 @@ http:
           - main: "codetee.machineand.me"
     the-default:
       entryPoints:
-      - web
-      - websecure
-      rule: "!Host(`machineand.me`) && !Host(`v1.ticker.love`) && !Host(`codetee.machineand.me`)"
+        - web
+        - websecure
+      rule: HostRegexp(`{host:.+}`)
       service: service-www
-      priority: 0
+      priority: 3
   services:
     service-www:
       loadBalancer:
         servers:
-        - url: "http://10.114.0.3/"
+          - url: "http://10.114.0.3/"
     service-ticker-backend:
       loadBalancer:
         servers:
-        - url: "http://10.114.0.4:4356"
-        - url: "http://10.114.0.4:4357"
-        - url: "http://10.114.0.4:4358"
+          - url: "http://10.114.0.4:4356"
+          - url: "http://10.114.0.4:4357"
+          - url: "http://10.114.0.4:4358"
     service-codetee:
       loadBalancer:
         servers:
-        - url: "http://10.114.0.6:8080"
-    # ticker:
-    #   loadBalancer:
-    #     servers:
-    #     - url: "http://10.114.0.4/"
+          - url: "http://10.114.0.6:8080"
